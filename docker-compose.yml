@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  client:
+    image: pow-tcp-client
+    container_name: pow-tcp-client
+    restart: always
+    env_file: .env
+    links:
+      - server:server
+
+  server:
+    image: pow-tcp-server
+    container_name: pow-tcp-server
+    restart: always
+    env_file: .env
