@@ -40,7 +40,7 @@ func main() {
 	//}
 
 	hc := hashcash.New(cfg.TargetBits)
-	server := server.NewPOWServer(library.BookDostoevsky, hc)
+	server := server.NewPOWServer(library.ITQuotes, hc)
 
 	log.Println("Listening on", cfg.Addr)
 	server.Listen(cfg.Addr)

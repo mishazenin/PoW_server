@@ -25,8 +25,8 @@ func (b *Book) RandomLine() ([]byte, error) {
 	return []byte(b.quotes[n.Int64()]), nil
 }
 
-// BookDostoevsky book with quotes from Fyodor Dostoevsky’s novels.
-var BookDostoevsky = &Book{
+// ITQuotes book with quotes
+var ITQuotes = &Book{
 	quotes: []string{
 		`First, solve the problem. Then, write the code`,
 		`Any fool can write code that a computer can understand. Good programmers write code that humans can understand`,
