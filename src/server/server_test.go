@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/LarsFox/pow-tcp/src/library"
 	"io"
+	"mishazenin/PoW_server/src/library"
 	"net/http"
 	"net/http/httptest"
 	"testing"

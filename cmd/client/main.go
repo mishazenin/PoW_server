@@ -5,7 +5,7 @@ import (
 
 	"github.com/vrischmann/envconfig"
 
-	"github.com/LarsFox/pow-tcp/src/client"
+	"mishazenin/PoW_server/src/client"
 )
 
 type config struct {

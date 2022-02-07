@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/LarsFox/pow-tcp/src/hashcash"
-	"github.com/LarsFox/pow-tcp/src/library"
-	"github.com/LarsFox/pow-tcp/src/server"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
+	"mishazenin/PoW_server/src/hashcash"
+	"mishazenin/PoW_server/src/library"
+	"mishazenin/PoW_server/src/server"
 	"os"
 	"strconv"
 )
