@@ -2,6 +2,7 @@ package server
 
 import (
 	"log"
+	"mishazenin/PoW_server/src/hashcash"
 	"mishazenin/PoW_server/src/library"
 	"net"
 	"net/http"
@@ -11,37 +12,23 @@ const (
 	hashcashHeader = "X-Hashcash"
 )
 
-////go:generate mockgen -destination=server_validator_mock_test.go -source=server.go -package=server
-type validator interface {
-	Challenge(ip string) (string, error)
-	Validate(solution string) bool
-}
-
 // POWServer is a simple Proof-of-Work server implementation.
 type POWServer struct {
-	book      *library.Library
-	validator validator
+	book      *library.Book
+	validator hashcash.Hashcash
 }
 
 // NewPOWServer returns new Proof-of-Work server.
-func NewPOWServer(book *library.Library, validator validator) *POWServer {
+func NewPOWServer(book *library.Book, hc hashcash.Hashcash) *POWServer {
 	return &POWServer{
 		book:      book,
-		validator: validator,
+		validator: hc,
 	}
 }
 
 // Listen listens on TCP network.
 func (s *POWServer) Listen(addr string) {
 	log.Fatal(http.ListenAndServe(addr, http.HandlerFunc(s.PoWHandler)))
-}
-
-func (s *POWServer) GetIP(r *http.Request) string {
-	ip, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return "9.9.9.9"
-	}
-	return ip
 }
 
 func (s *POWServer) PoWHandler(w http.ResponseWriter, r *http.Request) {
@@ -53,13 +40,13 @@ func (s *POWServer) PoWHandler(w http.ResponseWriter, r *http.Request) {
 
 	val := s.validator.Validate(hashcash)
 	if !val {
-		s.sendErr(w, http.StatusForbidden)
+		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
 	quote, err := s.book.RandomLine()
 	if err != nil {
-		s.sendErr(w, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -68,10 +55,10 @@ func (s *POWServer) PoWHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *POWServer) handleNewChallenge(w http.ResponseWriter, r *http.Request) {
-	ip := s.GetIP(r)
-	challenge, err := s.validator.Challenge(ip)
+	host := GetHost(r)
+	challenge, err := s.validator.Constructor(host)
 	if err != nil {
-		s.sendErr(w, http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -80,6 +67,10 @@ func (s *POWServer) handleNewChallenge(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (s *POWServer) sendErr(w http.ResponseWriter, code int) {
-	w.WriteHeader(code)
+func GetHost(r *http.Request) string {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return "7.7.7.7"
+	}
+	return host
 }

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"errors"
+	"github.com/joho/godotenv"
 	"log"
-
-	"github.com/vrischmann/envconfig"
-
 	"mishazenin/PoW_server/src/client"
+	"os"
 )
 
 type config struct {
@@ -13,11 +13,16 @@ type config struct {
 }
 
 func main() {
-	cfg := &config{}
-	if err := envconfig.InitWithPrefix(cfg, "pow_tcp"); err != nil {
-		log.Fatal(err)
+	err := godotenv.Load()
+	if err != nil {
+		log.Print(".env file not found")
 	}
+	addr, ok := os.LookupEnv("POW_TCP_SERVER_ADDR")
+	if !ok {
+		log.Fatal(errors.New("ENV is not set"))
+	}
+	cfg := &config{ServerAddr: addr}
 
-	cli := client.New(cfg.ServerAddr)
-	cli.Quote()
+	client := client.New(cfg.ServerAddr)
+	client.GetQuote()
 }

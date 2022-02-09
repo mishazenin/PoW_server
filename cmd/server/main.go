@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"mishazenin/PoW_server/src/hashcash"
@@ -9,14 +10,6 @@ import (
 	"os"
 	"strconv"
 )
-
-// init is invoked before main()
-//func init() {
-//	// loads values from .env into the system
-//	if err := godotenv.Load(); err != nil {
-//		log.Print("No .env file found")
-//	}
-//}
 
 type config struct {
 	Addr       string `required:"true"`
@@ -28,20 +21,23 @@ func main() {
 	if err != nil {
 		log.Print("No .env file found")
 	}
-	// Get the GITHUB_USERNAME environment variable
-	POW_TCP_ADDR, _ := os.LookupEnv("POW_TCP_ADDR")
-	POW_TCP_TARGET_BITS, _ := os.LookupEnv("POW_TCP_TARGET_BITS")
+
+	addr, ok := os.LookupEnv("POW_TCP_ADDR")
+	POW_TCP_TARGET_BITS, ok := os.LookupEnv("POW_TCP_TARGET_BITS")
+	if !ok {
+		log.Fatal(errors.New("ENV is not ser"))
+	}
 	bits, _ := strconv.Atoi(POW_TCP_TARGET_BITS)
 
-	cfg := &config{Addr: POW_TCP_ADDR, TargetBits: int64(bits)}
-
-	//if err := config.InitWithPrefix(cfg, "pow_tcp"); err != nil {
-	//	log.WithField("server", "config").Errorf("Couldn't read env config")
-	//}
+	cfg := &config{
+		Addr:       addr,
+		TargetBits: int64(bits),
+	}
 
 	hc := hashcash.New(cfg.TargetBits)
-	server := server.NewPOWServer(library.ITQuotes, hc)
+	POWserver := server.NewPOWServer(library.Quotes, *hc)
 
 	log.Println("Listening on", cfg.Addr)
-	server.Listen(cfg.Addr)
+
+	POWserver.Listen(cfg.Addr)
 }

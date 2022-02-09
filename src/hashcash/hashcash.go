@@ -3,7 +3,9 @@ package hashcash
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"errors"
 	"fmt"
+	"log"
 	"math"
 	"math/big"
 	"net"
@@ -14,7 +16,6 @@ import (
 const (
 	Bytes          = 8
 	hashcashLength = 7
-	TimeFormat     = "2006-01-02"
 )
 
 // Hashash generates and validates hashcashes.
@@ -35,12 +36,12 @@ func New(bits int64) *Hashcash {
 
 // Split returns values of a hashcash challenge as an array.
 // In case of array length mismatch, returns nil.
-func Split(s string) []string {
+func Split(s string) ([]string, error) {
 	vals := strings.Split(s, ":")
 	if len(vals) != hashcashLength {
-		return nil
+		return nil, errors.New("invalid hashcash length")
 	}
-	return vals
+	return vals, nil
 }
 
 // Challenge returns a new hashcash string with the missing nonce
@@ -48,12 +49,14 @@ func Split(s string) []string {
 // 1:20:060102150405:1.2.3.4::McMybZIhxKXu57jd:
 //
 // For details of Hashcash see https://en.wikipedia.org/wiki/Hashcash
-func (h *Hashcash) Challenge(ip string) (string, error) {
+func (h *Hashcash) Constructor(host string) (string, error) {
 	bytes := make([]byte, Bytes)
-
 	random := base64.StdEncoding.EncodeToString(bytes)
-	t := time.Now().UTC().Format(TimeFormat)
-	return fmt.Sprintf("1:%d:%s:%s::%s:", h.bits, t, ip, random), nil
+	return fmt.Sprintf("1:%d:%s:%s::%s:",
+		h.bits,
+		time.Now().UTC().Format("2006-01-02"),
+		host,
+		random), nil
 }
 
 // Solve bruteforces a challenge to find the matching nonce.
@@ -71,7 +74,10 @@ func (h *Hashcash) Solve(challenge string) string {
 
 // Validate checks if s is a valid hashcash value that meets specified target.
 func (h *Hashcash) Validate(s string) bool {
-	vals := Split(s)
+	vals, err := Split(s)
+	if err != nil {
+		log.Fatal(err)
+	}
 	if vals == nil {
 		return false
 	}
@@ -91,7 +97,7 @@ func (h *Hashcash) validateHash(s string) bool {
 }
 
 func (h *Hashcash) validateTime(val string) bool {
-	date, err := time.Parse(TimeFormat, val)
+	date, err := time.Parse("2006-01-02", val)
 	if err != nil {
 		return false
 	}
