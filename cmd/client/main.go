@@ -2,10 +2,12 @@ package main
 
 import (
 	"errors"
-	"github.com/joho/godotenv"
 	"log"
-	"mishazenin/PoW_server/src/client"
 	"os"
+
+	"github.com/joho/godotenv"
+
+	"mishazenin/PoW_server/src/client"
 )
 
 type config struct {

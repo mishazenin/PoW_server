@@ -3,9 +3,10 @@ package client
 import (
 	"io"
 	"log"
-	"mishazenin/PoW_server/src/hashcash"
 	"net/http"
 	"strconv"
+
+	"mishazenin/PoW_server/src/hashcash"
 )
 
 type HttpClient struct {

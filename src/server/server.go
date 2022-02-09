@@ -2,10 +2,11 @@ package server
 
 import (
 	"log"
-	"mishazenin/PoW_server/src/hashcash"
-	"mishazenin/PoW_server/src/library"
 	"net"
 	"net/http"
+
+	"mishazenin/PoW_server/src/hashcash"
+	"mishazenin/PoW_server/src/library"
 )
 
 const (

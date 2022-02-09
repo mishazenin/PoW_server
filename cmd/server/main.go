@@ -2,13 +2,15 @@ package main
 
 import (
 	"errors"
+	"os"
+	"strconv"
+
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
+
 	"mishazenin/PoW_server/src/hashcash"
 	"mishazenin/PoW_server/src/library"
 	"mishazenin/PoW_server/src/server"
-	"os"
-	"strconv"
 )
 
 type config struct {

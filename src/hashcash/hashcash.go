@@ -72,24 +72,18 @@ func (h *Hashcash) Solve(challenge string) string {
 	return ""
 }
 
-// Validate checks if s is a valid hashcash value that meets specified target.
+// Validate checks the hashcash is valid
 func (h *Hashcash) Validate(s string) bool {
 	vals, err := Split(s)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if vals == nil {
+
+	if vals == nil || !h.validateHash(s) || !h.validateTime(vals[2]) || net.ParseIP(vals[3]) == nil {
 		return false
 	}
 
-	if !h.validateHash(s) {
-		return false
-	}
-
-	if !h.validateTime(vals[2]) {
-		return false
-	}
-	return net.ParseIP(vals[3]) != nil
+	return true
 }
 
 func (h *Hashcash) validateHash(s string) bool {
@@ -99,9 +93,6 @@ func (h *Hashcash) validateHash(s string) bool {
 func (h *Hashcash) validateTime(val string) bool {
 	date, err := time.Parse("2006-01-02", val)
 	if err != nil {
-		return false
-	}
-	if date.After(time.Now()) {
 		return false
 	}
 	return date.After(time.Now().AddDate(0, 0, -1))
