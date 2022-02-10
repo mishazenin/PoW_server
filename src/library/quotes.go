@@ -5,12 +5,10 @@ import (
 	"time"
 )
 
-// Book is a storage for quotes.
 type Book struct {
 	quotes []string
 }
 
-// NewBook returns a new book with quotes.
 func NewBook(quotes []string) *Book {
 	return &Book{quotes: quotes}
 }
@@ -18,14 +16,12 @@ func NewBook(quotes []string) *Book {
 // RandomLine returns a random quote
 func (b *Book) RandomLine() ([]byte, error) {
 	rand.Seed(time.Now().UnixNano())
-
 	n := rand.Intn(len(b.quotes)+1) + 1
-
 	return []byte(b.quotes[int64(n)]), nil
 }
 
 // Quotes book with quotes
-var Quotes = &Book{
+var ItQuotes = &Book{
 	quotes: []string{
 		`First, solve the problem. Then, write the code`,
 		`Any fool can write code that a computer can understand. Good programmers write code that humans can understand`,

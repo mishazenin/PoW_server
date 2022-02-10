@@ -3,10 +3,6 @@ export $(shell sed 's/=.*//' .env)
 
 default: run-server
 
-init:
-	@cp .env.sample .env
-	@make mocks
-
 run-server:
 	@go run -race ./cmd/server/main.go
 
@@ -22,13 +18,6 @@ docker-run:
 
 docker-stop:
 	@docker-compose stop
-
-lint:
-	@golangci-lint run
-
-mocks:
-	@echo "Generating mocks..."
-	@go generate ./src/...
 
 test:
 	@echo "Running tests..."

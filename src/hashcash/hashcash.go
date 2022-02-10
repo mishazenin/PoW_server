@@ -14,11 +14,11 @@ import (
 )
 
 const (
-	Bytes          = 8
+	Bytes          = 80
 	hashcashLength = 7
 )
 
-// Hashash generates and validates hashcashes.
+// Hashash generates and validates hashcashes
 type Hashcash struct {
 	bits   int64
 	target *big.Int

@@ -13,7 +13,7 @@ const (
 	hashcashHeader = "X-Hashcash"
 )
 
-// POWServer is a simple Proof-of-Work server implementation.
+// POWServer is a simple Proof-of-Work server implementation
 type POWServer struct {
 	book      *library.Book
 	validator hashcash.Hashcash
@@ -27,7 +27,7 @@ func NewPOWServer(book *library.Book, hc hashcash.Hashcash) *POWServer {
 	}
 }
 
-// Listen listens on TCP network.
+// Listen listens to TCP
 func (s *POWServer) Listen(addr string) {
 	log.Fatal(http.ListenAndServe(addr, http.HandlerFunc(s.PoWHandler)))
 }
@@ -47,11 +47,12 @@ func (s *POWServer) PoWHandler(w http.ResponseWriter, r *http.Request) {
 
 	quote, err := s.book.RandomLine()
 	if err != nil {
+		log.Print("Could not get quote")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	log.Println("serving quote", string(quote))
+	log.Println("generating quote", string(quote))
 	w.Write(quote)
 }
 
@@ -63,7 +64,7 @@ func (s *POWServer) handleNewChallenge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("serving challenge", challenge)
+	log.Println("generating challenge", challenge)
 	w.Header().Set(hashcashHeader, challenge)
 	w.WriteHeader(http.StatusOK)
 }

@@ -1,10 +1,9 @@
 # Proof-of-Work Client & Server
 
-Pretty basic implementation.
+Basic implementation.
 
 ## Local launch
 
-1. `make init`
 1. Set server addr for local launch
 1. `make run-server`
 1. `make run-client`
@@ -14,7 +13,7 @@ Pretty basic implementation.
 1. `make init`
 1. `make docker-build`
 1. `make docker-run`
-1. `make docker-stop` when tired of client constantly restarting.
+1. `make docker-stop` 
 
 ## Protocol
 
