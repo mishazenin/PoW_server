@@ -13,25 +13,19 @@ Basic implementation.
 1. `make init`
 1. `make docker-build`
 1. `make docker-run`
-1. `make docker-stop` 
+1. `make docker-stop`
 
 ## Protocol
 
-Uses [Hashcash](https://en.wikipedia.org/wiki/Hashcash) because why not. Prove me wrong.
+In that version [Hashcash](https://en.wikipedia.org/wiki/Hashcash) is used.
 
-If the `X-Hashcash` header is not present in the incoming request, the server generates a challenge to solve with _nonce_ missing and sends it in `X-Hashcash` header, e.g. `X-Hashcash: 1:12:211224001325:1.2.3.4::yuRNNkxUcaU=:`.
+If the header in incoming request doesn't contain `X-Hashcash`, the server generate a challenge with missing _nonce_ and
+put in into `X-Hashcash` header e.g. `X-Hashcash: 1:12:211224001325:1.2.3.4::yuRNNkxUcaU=:`.
 
-The client then bruteforces the nonce so it satisfies the Hashcash target, concatenates it with the challenge sent by server and sends the solution using the same `X-Hashcash` header.
+So from the client side it's nessesary to bruteforce the nonce to be in fit to the Hashcash target and then sent
+solution to the same `X-Hashcash` header.
 
-Should the challenge be solved correctly, the server replies with a quote from Fyodor Dostoevsky’s novels. _The Possessed_ had the greatest influence on me so far.
+If the challenge is calculated correctly, the server replies random quote from book. 
 
-## Testing
 
-`make test`
 
-## TODO
-
-1. Detailed statuses for failed challenges.
-1. Storage to validate the hash.
-1. IP forwarding via Nginx.
-1. Follow the linters’ path.
