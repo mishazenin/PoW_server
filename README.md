@@ -1,6 +1,6 @@
 # Proof-of-Work Client & Server
 
-![](image/Frame 23.png)
+![](image/Frame%2023.png)
 
 
 ## Local launch
