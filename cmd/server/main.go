@@ -25,11 +25,11 @@ func main() {
 	}
 
 	addr, ok := os.LookupEnv("POW_TCP_ADDR")
-	POW_TCP_TARGET_BITS, ok := os.LookupEnv("POW_TCP_TARGET_BITS")
+	targetBits, ok := os.LookupEnv("POW_TCP_TARGET_BITS")
 	if !ok {
 		log.Fatal(errors.New("ENV is not ser"))
 	}
-	bits, _ := strconv.Atoi(POW_TCP_TARGET_BITS)
+	bits, _ := strconv.Atoi(targetBits)
 
 	cfg := &config{
 		Addr:       addr,

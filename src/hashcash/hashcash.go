@@ -18,7 +18,7 @@ const (
 	hashcashLength = 7
 )
 
-// Hashash generates and validates hashcashes
+// Hashcash generates and validates hashcashes
 type Hashcash struct {
 	bits   int64
 	target *big.Int
@@ -44,11 +44,7 @@ func Split(s string) ([]string, error) {
 	return vals, nil
 }
 
-// Challenge returns a new hashcash string with the missing nonce
-// that serves as a base for Proof-of-work algorhythm, e.g.
-// 1:20:060102150405:1.2.3.4::McMybZIhxKXu57jd:
-//
-// For details of Hashcash see https://en.wikipedia.org/wiki/Hashcash
+// Constructor returns new hashcash string with the missing nonce
 func (h *Hashcash) Constructor(host string) (string, error) {
 	bytes := make([]byte, Bytes)
 	random := base64.StdEncoding.EncodeToString(bytes)
@@ -59,7 +55,7 @@ func (h *Hashcash) Constructor(host string) (string, error) {
 		random), nil
 }
 
-// Solve bruteforces a challenge to find the matching nonce.
+// Solve bruteforces a challenge to find the matching nonce.
 func (h *Hashcash) Solve(challenge string) string {
 
 	for nonce := 0; nonce < math.MaxInt64; nonce++ {

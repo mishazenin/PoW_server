@@ -20,7 +20,7 @@ func (b *Book) RandomLine() ([]byte, error) {
 	return []byte(b.quotes[int64(n)]), nil
 }
 
-// Quotes book with quotes
+// ItQuotes book with quotes
 var ItQuotes = &Book{
 	quotes: []string{
 		`First, solve the problem. Then, write the code`,
