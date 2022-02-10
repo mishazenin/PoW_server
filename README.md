@@ -1,6 +1,6 @@
 # Proof-of-Work Client & Server
 
-Basic implementation.
+![](image/PoW.png)
 
 ## Local launch
 
