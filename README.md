@@ -2,6 +2,7 @@
 
 ![](image/PoW.png)
 
+
 ## Local launch
 
 1. Set server addr for local launch
