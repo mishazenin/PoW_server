@@ -1,4 +1,4 @@
-package hashcash
+package pkg
 
 import (
 	"crypto/sha256"

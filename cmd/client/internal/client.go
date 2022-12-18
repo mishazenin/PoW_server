@@ -1,4 +1,4 @@
-package client
+package internal
 
 import (
 	"io"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"mishazenin/PoW_server/src/hashcash"
+	"mishazenin/PoW_server/pkg"
 )
 
 type HttpClient struct {
@@ -22,40 +22,40 @@ func New(addr string) *HttpClient {
 func (c *HttpClient) GetQuote() {
 	resp, err := http.Get(c.addr)
 	if err != nil {
-		log.Fatal("could not get challenge:", err)
+		log.Fatalf("could not get challenge: %w", err)
 	}
 	defer resp.Body.Close()
 
 	challenge := resp.Header.Get("X-Hashcash")
-	vals, err := hashcash.Split(challenge)
+	vals, err := pkg.Split(challenge)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	bits, err := strconv.ParseInt(vals[1], 10, 0)
 	if err != nil {
-		log.Fatal("invalid bit length:", err)
+		log.Fatalf("invalid bit length:%w", err)
 	}
 
-	solution := hashcash.New(bits).Solve(challenge)
+	solution := pkg.New(bits).Solve(challenge)
 	req, err := http.NewRequest(http.MethodGet, c.addr, nil)
 	if err != nil {
-		log.Fatal("new request err:", err)
+		log.Fatalf("new request err: %w", err)
 	}
 
 	req.Header.Add("X-Hashcash", solution)
 
 	respSolve, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Fatal("check challenge err:", err)
+		log.Fatalf("check challenge err: %w", err)
 	}
 	if respSolve.StatusCode != http.StatusOK {
-		log.Fatal("check challenge not ok:", resp.StatusCode)
+		log.Fatalf("check challenge not ok: %d", resp.StatusCode)
 	}
 
 	quote, err := io.ReadAll(respSolve.Body)
 	if err != nil {
-		log.Fatal("read quote err:", err)
+		log.Fatalf("read quote err: %w", err)
 	}
 	defer respSolve.Body.Close()
 

@@ -5,12 +5,11 @@ import (
 	"os"
 	"strconv"
 
+	"mishazenin/PoW_server/cmd/server/internal"
+	"mishazenin/PoW_server/pkg"
+
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
-
-	"mishazenin/PoW_server/src/hashcash"
-	"mishazenin/PoW_server/src/library"
-	"mishazenin/PoW_server/src/server"
 )
 
 type config struct {
@@ -36,10 +35,10 @@ func main() {
 		TargetBits: int64(bits),
 	}
 
-	hc := hashcash.New(cfg.TargetBits)
-	POWserver := server.NewPOWServer(library.ItQuotes, *hc)
+	hc := pkg.New(cfg.TargetBits)
+	POWserver := internal.NewPOWServer(internal.ItQuotes, *hc)
 
-	log.Println("Listening on", cfg.Addr)
+	log.Printf("Listening on: %s", cfg.Addr)
 
 	POWserver.Listen(cfg.Addr)
 }

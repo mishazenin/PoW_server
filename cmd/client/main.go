@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
+	"mishazenin/PoW_server/cmd/client/internal"
 
-	"mishazenin/PoW_server/src/client"
+	"github.com/joho/godotenv"
 )
 
 type config struct {
@@ -25,6 +25,6 @@ func main() {
 	}
 	cfg := &config{ServerAddr: addr}
 
-	client := client.New(cfg.ServerAddr)
+	client := internal.New(cfg.ServerAddr)
 	client.GetQuote()
 }

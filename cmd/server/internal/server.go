@@ -1,26 +1,23 @@
-package server
+package internal
 
 import (
 	"log"
 	"net"
 	"net/http"
 
-	"mishazenin/PoW_server/src/hashcash"
-	"mishazenin/PoW_server/src/library"
+	"mishazenin/PoW_server/pkg"
 )
 
-const (
-	hashcashHeader = "X-Hashcash"
-)
+const hashcashHeader = "X-Hashcash"
 
 // POWServer is a simple Proof-of-Work server implementation
 type POWServer struct {
-	book      *library.Book
-	validator hashcash.Hashcash
+	book      *Book
+	validator pkg.Hashcash
 }
 
 // NewPOWServer returns new Proof-of-Work server.
-func NewPOWServer(book *library.Book, hc hashcash.Hashcash) *POWServer {
+func NewPOWServer(book *Book, hc pkg.Hashcash) *POWServer {
 	return &POWServer{
 		book:      book,
 		validator: hc,
